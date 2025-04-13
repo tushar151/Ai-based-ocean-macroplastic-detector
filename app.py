@@ -30,7 +30,8 @@ if uploaded_file:
     with col1:
         st.markdown("### 🖼️ Uploaded Image")
         image = Image.open(uploaded_file).convert("RGB")  # Ensure 3-channel RGB
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        st.image(image, caption="Uploaded Image", use_container_width=True)
+
 
     # Convert image to OpenCV format
     image_np = np.array(image)  # Now it's guaranteed to be RGB
@@ -76,7 +77,8 @@ if uploaded_file:
 
     with col2:
         st.markdown("### 🔍 Detected Image")
-        st.image(image_cv, caption="Processed Image", use_column_width=True)
+        st.image(image_cv, caption="Processed Image", use_container_width=True)
+
 
     # Convert image for downloading
     output_img = Image.fromarray(image_cv)
