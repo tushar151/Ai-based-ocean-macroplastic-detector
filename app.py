@@ -6,7 +6,7 @@ from ultralytics import YOLO
 from io import BytesIO
 
 # Load YOLO model
-model_path = "C:/Users/TUSHAR SETHI/Downloads/best (1).pt"  # Update with your model path
+model_path = "best (1).pt"  # Update with your model path
 model = YOLO(model_path)
 
 # Define colors
