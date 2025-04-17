@@ -3,4 +3,3 @@ ultralytics
 numpy
 Pillow
 streamlit
-libgl1
