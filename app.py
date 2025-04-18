@@ -1,5 +1,5 @@
 import streamlit as st
-import cv2
+
 import numpy as np
 from PIL import Image
 from ultralytics import YOLO
@@ -101,7 +101,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 # If image is uploaded
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, use_column_width=True)
+    st.image(image, use_container_width=True)
 
     # Styled caption
     st.markdown("""
@@ -148,7 +148,7 @@ if uploaded_file:
 
         # Display output image
         st.markdown("<div class='output-section'>", unsafe_allow_html=True)
-        st.image(output_img, use_column_width=True)
+        st.image(output_img, use_container_width=True)
 
         # Custom styled caption
         st.markdown("""
