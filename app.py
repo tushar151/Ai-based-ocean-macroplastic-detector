@@ -38,7 +38,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 # If image is uploaded
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, use_column_width=True)
+    st.image(image, use_container_width=True)
 
     # Styled caption
     st.markdown("""
@@ -125,7 +125,7 @@ if uploaded_file:
         st.markdown(
             "<div style='padding: 25px; border-radius: 20px; background: linear-gradient(135deg, #ffecd2, #fcb69f); margin: 1rem 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: all 0.3s ease-in-out;'>",
             unsafe_allow_html=True)
-        st.image(output_img, use_column_width=True)
+        st.image(output_img, use_container_width=True)
 
         # Custom styled caption
         st.markdown("""
