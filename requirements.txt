@@ -1,7 +1,9 @@
 
-ultralytics==8.1.18
-opencv-python-headless
-numpy==1.24.4
+numpy
 streamlit
+Pillow
+ultralytics
+opencv-python-headless
+
 
 
