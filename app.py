@@ -1,9 +1,9 @@
 import streamlit as st
 import cv2
 import numpy as np
-from PIL import Image
 from ultralytics import YOLO
 from io import BytesIO
+import tempfile
 
 # Load YOLO model
 model_path = "best (1).pt"  # Update your model path
@@ -35,42 +35,42 @@ uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png"])
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# If image is uploaded
 if uploaded_file:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, use_container_width=True)
+    # Save uploaded image temporarily and load with OpenCV
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp_file:
+        tmp_file.write(uploaded_file.read())
+        tmp_path = tmp_file.name
 
-    # Styled caption
+    # Read and convert image using OpenCV
+    image_cv = cv2.imread(tmp_path)
+    image_rgb = cv2.cvtColor(image_cv, cv2.COLOR_BGR2RGB)
+
+    # Display uploaded image
+    st.image(image_rgb, channels="RGB", use_container_width=True)
+
     st.markdown("""
         <h3 style='text-align:center; color:#1f618d; font-weight: bold;'>
             🖼️ Uploaded Image
         </h3>
     """, unsafe_allow_html=True)
 
-    # Slider with inline CSS
+    # Slider styling
     st.markdown("""
         <style>
-            /* Slider label and number color */
             label[data-testid="stSliderLabel"] {
                 font-size: 1.3rem !important;
                 font-weight: bold !important;
-                color: #003366 !important;  /* Dark blue */
+                color: #003366 !important;
             }
-
-            /* Slider track and background */
             .stSlider > div > div > div > div {
-                background-color: black !important;  /* Black background for the slider track */
+                background-color: black !important;
             }
-
-            /* Slider handle */
             .stSlider > div > div > div > div:nth-child(3) {
-                background-color: black !important;  /* Black handle */
+                background-color: black !important;
                 border-radius: 50%;
             }
-
-            /* Value numbers on the slider */
             .stSlider .css-1lv4x1j, .stSlider .css-14xtw13 {
-                color: black !important;  /* Black color for the number values on the slider */
+                color: black !important;
                 font-weight: bold !important;
             }
         </style>
@@ -88,12 +88,7 @@ if uploaded_file:
     detect_btn = st.button("🔍 Detect Plastic")
 
     if detect_btn:
-        # Convert to OpenCV format
-        image_np = np.array(image)
-        image_cv = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
-
-        # YOLO detection
-        results = model(image_np, conf=conf_threshold)
+        results = model(image_rgb, conf=conf_threshold)
         class_names = model.names
         plastic_found = False
 
@@ -104,37 +99,29 @@ if uploaded_file:
                 label = class_names[cls]
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
 
-                # Plastic if not 'misc'
                 is_plastic = label.lower() != "misc"
                 if is_plastic:
                     plastic_found = True
-                    box_color = (255, 0, 0)  # Red for plastic
+                    box_color = (255, 0, 0)
                 else:
-                    box_color = (0, 255, 0)  # Green for misc
+                    box_color = (0, 255, 0)
 
-                # Draw bounding box and label
-                cv2.rectangle(image_cv, (x1, y1), (x2, y2), box_color, 2)
+                cv2.rectangle(image_rgb, (x1, y1), (x2, y2), box_color, 2)
                 text = f"{label} ({conf:.2f})"
-                cv2.putText(image_cv, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
+                cv2.putText(image_rgb, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 2)
 
-        # Convert back to RGB
-        image_cv = cv2.cvtColor(image_cv, cv2.COLOR_BGR2RGB)
-        output_img = Image.fromarray(image_cv)
-
-        # Display output image
+        # Display result image
         st.markdown(
             "<div style='padding: 25px; border-radius: 20px; background: linear-gradient(135deg, #ffecd2, #fcb69f); margin: 1rem 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: all 0.3s ease-in-out;'>",
             unsafe_allow_html=True)
-        st.image(output_img, use_container_width=True)
+        st.image(image_rgb, channels="RGB", use_container_width=True)
 
-        # Custom styled caption
         st.markdown("""
             <h3 style='text-align:center; color:#1f618d; font-weight: bold;'>
                 ✅ Detected Plastic Waste
             </h3>
         """, unsafe_allow_html=True)
 
-        # Display detection result
         if plastic_found:
             st.markdown("""
                 <h3 style='text-align:center; color:#8B008B; font-weight: bold;'>
@@ -148,10 +135,9 @@ if uploaded_file:
                 </h3>
             """, unsafe_allow_html=True)
 
-        # Download option
-        img_buffer = BytesIO()
-        output_img.save(img_buffer, format="JPEG")
-        img_bytes = img_buffer.getvalue()
+        # Convert OpenCV image to downloadable JPEG
+        _, img_encoded = cv2.imencode(".jpg", cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR))
+        img_bytes = img_encoded.tobytes()
 
         st.download_button(
             "⬇️ Download Detected Image",
@@ -161,12 +147,12 @@ if uploaded_file:
         )
         st.markdown("</div>", unsafe_allow_html=True)
 
+# Footer
 st.markdown(
     """<div class='footer' style='font-size: 20px; font-weight: bold; text-align: center; background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a6c1ee); -webkit-background-clip: text; color: transparent; padding: 10px;'>💡 This app uses a <span style="color:#e74c3c;">YOLOv8</span> model to identify <span style="color:yellow;">plastic waste</span> in the ocean. 🌊 Save our <span style="color:#3498db;">blue planet</span>! 💙🐠</div>""",
     unsafe_allow_html=True)
 
-
-
+# Comparison table
 st.markdown("""
 ### 📊 Model Comparison
 
@@ -177,4 +163,3 @@ st.markdown("""
 | Faster R-CNN  | TrashNet  | 0.68    | 0.72      | 0.60   | ~12  | [TrashNet Paper](https://ieeexplore.ieee.org/document/8909650)      |
 | SSD           | DeepTrash | 0.63    | 0.60      | 0.62   | ~50  | [DeepTrash – arXiv](https://arxiv.org/abs/2004.04989)               |
 """)
-
