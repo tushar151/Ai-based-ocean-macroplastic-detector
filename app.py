@@ -165,28 +165,7 @@ st.markdown(
     """<div class='footer' style='font-size: 20px; font-weight: bold; text-align: center; background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a6c1ee); -webkit-background-clip: text; color: transparent; padding: 10px;'>💡 This app uses a <span style="color:#e74c3c;">YOLOv8</span> model to identify <span style="color:yellow;">plastic waste</span> in the ocean. 🌊 Save our <span style="color:#3498db;">blue planet</span>! 💙🐠</div>""",
     unsafe_allow_html=True)
 
-import streamlit as st
-import pandas as pd
 
-data = {
-    "Model": ["YOLOv8 (Ours)", "YOLOv5", "Faster R-CNN", "SSD"],
-    "Dataset": ["Custom", "MARIDA", "TrashNet", "DeepTrash"],
-    "mAP@0.5": [0.756, 0.70, 0.68, 0.63],
-    "Precision": [0.732, 0.69, 0.72, 0.60],
-    "Recall": [0.713, 0.65, 0.60, 0.62],
-    "FPS": ["30+", "~25", "~12", "~50"],
-    "Source": [
-        "Your Results",
-        "MARIDA Paper – MDPI 2021",
-        "TrashNet Paper",
-        "DeepTrash Paper – Arxiv"
-    ]
-}
-
-df = pd.DataFrame(data)
-st.subheader("📊 Model Comparison")
-st.dataframe(df, use_container_width=True)
-import streamlit as st
 
 st.markdown("""
 ### 📊 Model Comparison
