@@ -153,13 +153,13 @@ st.markdown(
     unsafe_allow_html=True)
 
 # Comparison table
-st.markdown("""
-### 📊 Model Comparison
+# st.markdown("""
+# ### 📊 Model Comparison
 
-| Model         | Dataset   | mAP@0.5 | Precision | Recall | FPS  | Source                        |
-|---------------|-----------|---------|-----------|--------|------|-------------------------------|
-| YOLOv8 (Ours) | Custom    | 0.756   | 0.732     | 0.713  | 30+  | Your Results                  |
-| YOLOv5        | MARIDA    | 0.70    | 0.69      | 0.65   | ~25  | [MARIDA Paper – MDPI 2021](https://www.mdpi.com/2072-4292/13/4/658) |
-| Faster R-CNN  | TrashNet  | 0.68    | 0.72      | 0.60   | ~12  | [TrashNet Paper](https://ieeexplore.ieee.org/document/8909650)      |
-| SSD           | DeepTrash | 0.63    | 0.60      | 0.62   | ~50  | [DeepTrash – arXiv](https://arxiv.org/abs/2004.04989)               |
-""")
+# | Model         | Dataset   | mAP@0.5 | Precision | Recall | FPS  | Source                        |
+# |---------------|-----------|---------|-----------|--------|------|-------------------------------|
+# | YOLOv8 (Ours) | Custom    | 0.756   | 0.732     | 0.713  | 30+  | Your Results                  |
+# | YOLOv5        | MARIDA    | 0.70    | 0.69      | 0.65   | ~25  | [MARIDA Paper – MDPI 2021](https://www.mdpi.com/2072-4292/13/4/658) |
+# | Faster R-CNN  | TrashNet  | 0.68    | 0.72      | 0.60   | ~12  | [TrashNet Paper](https://ieeexplore.ieee.org/document/8909650)      |
+# | SSD           | DeepTrash | 0.63    | 0.60      | 0.62   | ~50  | [DeepTrash – arXiv](https://arxiv.org/abs/2004.04989)               |
+# """)
