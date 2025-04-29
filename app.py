@@ -6,7 +6,7 @@ from ultralytics import YOLO
 from io import BytesIO
 
 # Load YOLO model
-model_path = "best (1).pt"  # Update your model path
+model_path = "mymodel.pt"  # Update your model path
 model = YOLO(model_path)
 
 # Streamlit page config
@@ -38,7 +38,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 # If image is uploaded
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, use_container_width=True)
+    st.image(image, use_column_width=True)
 
     # Styled caption
     st.markdown("""
@@ -78,10 +78,10 @@ if uploaded_file:
 
     conf_threshold = st.slider(
         "🛠️ Confidence Threshold",
-        min_value=0.1,
+        min_value=0.01,
         max_value=1.0,
         value=0.25,
-        step=0.05,
+        step=0.01,
         help="Adjust this to reduce false positives like misclassifying turtles as plastic."
     )
 
@@ -125,7 +125,7 @@ if uploaded_file:
         st.markdown(
             "<div style='padding: 25px; border-radius: 20px; background: linear-gradient(135deg, #ffecd2, #fcb69f); margin: 1rem 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: all 0.3s ease-in-out;'>",
             unsafe_allow_html=True)
-        st.image(output_img, use_container_width=True)
+        st.image(output_img, use_column_width=True)
 
         # Custom styled caption
         st.markdown("""
@@ -164,38 +164,3 @@ if uploaded_file:
 st.markdown(
     """<div class='footer' style='font-size: 20px; font-weight: bold; text-align: center; background: linear-gradient(90deg, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a6c1ee); -webkit-background-clip: text; color: transparent; padding: 10px;'>💡 This app uses a <span style="color:#e74c3c;">YOLOv8</span> model to identify <span style="color:yellow;">plastic waste</span> in the ocean. 🌊 Save our <span style="color:#3498db;">blue planet</span>! 💙🐠</div>""",
     unsafe_allow_html=True)
-
-# import streamlit as st
-# import pandas as pd
-
-# data = {
-#     "Model": ["YOLOv8 (Ours)", "YOLOv5", "Faster R-CNN", "SSD"],
-#     "Dataset": ["Custom", "MARIDA", "TrashNet", "DeepTrash"],
-#     "mAP@0.5": [0.756, 0.70, 0.68, 0.63],
-#     "Precision": [0.732, 0.69, 0.72, 0.60],
-#     "Recall": [0.713, 0.65, 0.60, 0.62],
-#     "FPS": ["30+", "~25", "~12", "~50"],
-#     "Source": [
-#         "Your Results",
-#         "MARIDA Paper – MDPI 2021",
-#         "TrashNet Paper",
-#         "DeepTrash Paper – Arxiv"
-#     ]
-# }
-
-# df = pd.DataFrame(data)
-# st.subheader("📊 Model Comparison")
-# st.dataframe(df, use_container_width=True)
-# import streamlit as st
-
-# st.markdown("""
-# ### 📊 Model Comparison
-
-# | Model         | Dataset   | mAP@0.5 | Precision | Recall | FPS  | Source                        |
-# |---------------|-----------|---------|-----------|--------|------|-------------------------------|
-# | YOLOv8 (Ours) | Custom    | 0.756   | 0.732     | 0.713  | 30+  | Your Results                  |
-# | YOLOv5        | MARIDA    | 0.70    | 0.69      | 0.65   | ~25  | [MARIDA Paper – MDPI 2021](https://www.mdpi.com/2072-4292/13/4/658) |
-# | Faster R-CNN  | TrashNet  | 0.68    | 0.72      | 0.60   | ~12  | [TrashNet Paper](https://ieeexplore.ieee.org/document/8909650)      |
-# | SSD           | DeepTrash | 0.63    | 0.60      | 0.62   | ~50  | [DeepTrash – arXiv](https://arxiv.org/abs/2004.04989)               |
-# """)
-
