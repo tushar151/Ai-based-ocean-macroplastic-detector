@@ -104,6 +104,7 @@ if uploaded_file:
                 label = class_names[cls]
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 txt_c=(255,255,255)
+                bg_color = (0, 0, 0)
 
                 # Plastic if not 'misc'
                 is_plastic = label.lower() != "misc"
@@ -116,6 +117,8 @@ if uploaded_file:
                 # Draw bounding box and label
                 cv2.rectangle(image_cv, (x1, y1), (x2, y2), box_color, 2)
                 text = f"{label} ({conf:.2f})"
+                (text_width, text_height), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+                cv2.rectangle(image_cv, (x1, y1 - text_height - 10), (x1 + text_width + 4, y1), bg_color, -1)
                 cv2.putText(image_cv, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, txt_c, 2)
 
         # Convert back to RGB
